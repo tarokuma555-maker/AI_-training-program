@@ -2,6 +2,7 @@
 
 import { randomUUID } from "crypto";
 import { createAnonClient } from "@/lib/supabase/anon";
+import { screenAndStore } from "@/lib/ai/screening";
 import {
   type ApplicationInput,
   type ValidationErrors,
@@ -48,6 +49,10 @@ export async function submitApplication(
         "送信に失敗しました。お手数ですが、時間をおいて再度お試しください。",
     };
   }
+
+  // AI一次判定（転職トラックのみ）。失敗しても申込は成立し、statusはpendingのまま。
+  // 判定はai_reviewedで止まり、最終判断は管理画面で人間が行う。
+  await screenAndStore(id, input);
 
   return { ok: true };
 }

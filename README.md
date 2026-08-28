@@ -71,3 +71,26 @@ supabase/       DBマイグレーションSQL
    status が `pending` であること
 7. RLSの確認：anonキーで `select` すると0件になること
    （SQL Editorで `set role anon; select * from applications;` → 0件）
+
+### フェーズ3：AI一次判定
+
+事前準備：
+
+1. `.env.local` に `ANTHROPIC_API_KEY` を設定する（[Anthropic Console](https://console.anthropic.com/) で発行）
+
+確認手順：
+
+1. 申込フォームで「転職したい」を選び、すべて入力して送信する
+2. Supabaseの Table Editor で該当行を確認：
+   - `status` が `ai_reviewed` になっていること
+   - `ai_verdict` に3観点（q2_specific_goal / q4_judgment_experience /
+     q3_q5_realistic）のYES/NOと日本語1行の理由が入っていること
+   - YESが2つ以上なら `ai_recommendation` が `pass`、それ以外は `review`
+3. 「AIスキルを学びたい」で送信した場合はAI判定の対象外
+   （`status=pending` のまま。設問2・3が無いため。管理画面で振り分ける）
+4. 失敗時の挙動：`ANTHROPIC_API_KEY` を空にして送信しても
+   申込は完了表示になり、行は `status=pending` のまま保存されること
+   （判定失敗は申込者に見せない）
+
+補足：AI判定はstatusを自動で `approved` にせず、`ai_reviewed` で止まります。
+最終判断は必ず管理画面（フェーズ4）で人間が行います。
