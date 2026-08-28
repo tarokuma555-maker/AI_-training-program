@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import {
   TIMING_LABELS,
   TRACK_LABELS,
@@ -43,6 +44,9 @@ export default async function AdminDetailPage({
 }: {
   params: { id: string };
 }) {
+  if (!isSupabaseConfigured()) {
+    return null; // 未設定時の案内はレイアウト側で表示する
+  }
   const supabase = createServerSupabase();
   const { data, error } = await supabase
     .from("applications")

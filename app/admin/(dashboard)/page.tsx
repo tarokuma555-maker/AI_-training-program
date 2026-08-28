@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { TRACK_LABELS } from "@/lib/applications";
 import { formatDateTime, type ApplicationRow } from "@/lib/types";
 import StatusBadge from "@/components/admin/StatusBadge";
@@ -8,6 +9,9 @@ import AiVerdictView from "@/components/admin/AiVerdictView";
 export const dynamic = "force-dynamic";
 
 export default async function AdminListPage() {
+  if (!isSupabaseConfigured()) {
+    return null; // 未設定時の案内はレイアウト側で表示する
+  }
   const supabase = createServerSupabase();
   const { data, error } = await supabase
     .from("applications")
