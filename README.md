@@ -46,3 +46,28 @@ supabase/       DBマイグレーションSQL
 7. スマホ幅（375px前後）で表示崩れがないこと（モバイルファースト）
 8. ブラウザタブにfaviconが表示されること。
    OGPは `curl -s http://localhost:3000 | grep og:` でメタタグを確認できる
+
+### フェーズ2：申込フォーム＋Supabase保存
+
+事前準備：
+
+1. Supabaseプロジェクトを作成し、SQL Editorで
+   `supabase/migrations/0001_applications.sql` を実行する
+2. `.env.local` に以下を設定する：
+   - `NEXT_PUBLIC_SUPABASE_URL`（Settings > API の Project URL）
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`（同 anon public キー）
+   - `SUPABASE_SERVICE_ROLE_KEY`（同 service_role キー。サーバー専用）
+
+確認手順：
+
+1. `npm run dev` で起動し、LPの申込セクションまでスクロール
+2. 設問1で「転職したい」を選ぶと設問2・3・6が表示され、
+   「AIスキルを学びたい」を選ぶと非表示になること（設問番号も詰まる）
+3. 未入力で送信するとエラーメッセージが各設問の下に表示されること
+4. すべて入力して送信すると「お申込みを受け付けました／24時間以内にメールで
+   ご案内します」の完了表示に切り替わること（確認画面なし・1画面完結）
+5. 送信中はボタンが「送信中…」になり連打できないこと（二重送信防止）
+6. Supabaseの Table Editor で applications に行が追加され、
+   status が `pending` であること
+7. RLSの確認：anonキーで `select` すると0件になること
+   （SQL Editorで `set role anon; select * from applications;` → 0件）
