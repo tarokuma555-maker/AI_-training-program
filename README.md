@@ -94,3 +94,31 @@ supabase/       DBマイグレーションSQL
 
 補足：AI判定はstatusを自動で `approved` にせず、`ai_reviewed` で止まります。
 最終判断は必ず管理画面（フェーズ4）で人間が行います。
+
+### フェーズ4：審査管理画面（/admin）
+
+事前準備（管理者1名・招待制）：
+
+1. Supabaseダッシュボード > Authentication > Users >「Invite user」で
+   管理者のメールアドレスを招待する（サインアップは開放しない運用。
+   Authentication > Sign In / Up で「Allow new users to sign up」をオフ推奨）
+2. Authentication > URL Configuration で
+   - Site URL：`http://localhost:3000`（本番はデプロイURL）
+   - Redirect URLs：`http://localhost:3000/auth/callback` を追加
+
+確認手順：
+
+1. 未ログインで `http://localhost:3000/admin` を開くと
+   `/admin/login` にリダイレクトされること
+2. 招待済みメールアドレスでログインリンクを送信し、メール内リンクから
+   `/admin` に入れること（未招待のアドレスではエラーになること）
+3. 申込一覧に「日時／氏名／希望／AI判定結果と理由／ステータス」が
+   新しい順に表示されること
+4. 「詳細」から全回答・AI判定理由が閲覧できること
+5. 審査メモを入力して「承認（無料相談案内へ）」等のボタンを押すと、
+   ステータスが変わり、`reviewed_at` と `reviewer_note` が保存されること
+   （一覧に戻るとバッジが更新されている）
+6. 「案内メールの定型文」の各ボタンでクリップボードに文面がコピーされること
+   （見送り文面は ①講座見送り→②転職支援の案内→③次期優先案内→④末尾に有料講座 の順。
+   文面はプレースホルダなので後で差し替える）
+7. ヘッダーの「ログアウト」で `/admin/login` に戻ること
