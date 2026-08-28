@@ -61,3 +61,20 @@ http://localhost:3000 で起動します。
 6. Supabaseダッシュボードの Table Editor で `applications` に行が入っていること（`status = pending`）
 7. anon キーでの select が拒否されることの確認（任意）：ブラウザのコンソール等から anon キーで
    `applications` を select しても行が返らないこと（RLSにより insert のみ許可）
+
+### フェーズ3：AI一次判定
+
+事前準備：
+
+1. `.env.local` に `ANTHROPIC_API_KEY` と `SUPABASE_SERVICE_ROLE_KEY` を設定する
+
+確認手順：
+
+1. 申込フォームから「転職したい」でテスト送信する
+2. Supabaseの `applications` で、該当行が `status = ai_reviewed` になり、
+   `ai_verdict`（3観点それぞれの YES/NO＋日本語1行の理由）と
+   `ai_recommendation`（YESが2つ以上なら `pass`、それ以外 `review`）が入っていること
+3. AIが `status` を `approved` にしないこと（`ai_reviewed` で止まる。最終判断は管理画面で人間が行う）
+4. 判定失敗時の挙動：`.env.local` の `ANTHROPIC_API_KEY` を一時的に無効な値にして送信しても、
+   申込者側は正常に完了画面が表示され、行は `status = pending` のまま保存されること
+   （確認後はキーを元に戻す）
