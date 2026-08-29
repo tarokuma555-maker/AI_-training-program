@@ -20,6 +20,14 @@ npm run dev
 
 http://localhost:3000 で起動します。
 
+## 受講生アプリ（career-app）との関係
+
+受講生アプリは [career-app/](./career-app/) にあり、**同じSupabaseプロジェクトを共有**します。
+受講生アプリを導入したら、必ず `supabase/migrations/0002_applications_admin_only.sql` を実行してください
+（申込データの閲覧を管理者に限定するRLS強化。受講生アプリの `0001_career_app_schema.sql` を先に実行）。
+LPの審査管理者と受講生アプリの講師（admin）は同一のAuthユーザーを使い、
+`profiles` に `role = 'admin'` の行を作成してください（手順は career-app/README.md）。
+
 ## ページ構成
 
 | パス | 内容 |
