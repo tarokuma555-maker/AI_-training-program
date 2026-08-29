@@ -1,5 +1,19 @@
 create extension if not exists pgcrypto;
 
+-- ── profiles ──
+-- 注意：SQL関数（language sql）は作成時に本体が検証されるため、
+-- profiles を参照するヘルパー関数より先にテーブルを作成する
+create table public.profiles (
+  id uuid primary key references auth.users (id) on delete cascade,
+  name text not null,
+  email text not null unique,
+  role text not null default 'student' check (role in ('student', 'admin')),
+  track text check (track in ('career', 'skill')),
+  cohort text,                       -- 例 '2026-1'
+  created_at timestamptz not null default now(),
+  check (role = 'admin' or (track is not null and cohort is not null))
+);
+
 -- ── ヘルパー関数（RLSから利用。security definerでprofilesを参照） ──
 create or replace function public.is_admin() returns boolean
 language sql stable security definer set search_path = public as
@@ -12,18 +26,6 @@ $$ select track from profiles where id = auth.uid() $$;
 create or replace function public.current_cohort() returns text
 language sql stable security definer set search_path = public as
 $$ select cohort from profiles where id = auth.uid() $$;
-
--- ── profiles ──
-create table public.profiles (
-  id uuid primary key references auth.users (id) on delete cascade,
-  name text not null,
-  email text not null unique,
-  role text not null default 'student' check (role in ('student', 'admin')),
-  track text check (track in ('career', 'skill')),
-  cohort text,                       -- 例 '2026-1'
-  created_at timestamptz not null default now(),
-  check (role = 'admin' or (track is not null and cohort is not null))
-);
 alter table public.profiles enable row level security;
 create policy "profiles_select" on public.profiles for select to authenticated
   using (id = auth.uid() or is_admin());
