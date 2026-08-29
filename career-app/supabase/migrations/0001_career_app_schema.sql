@@ -166,6 +166,12 @@ begin
   return v_id;
 end $$;
 
+-- 枠ごとの予約数（受講生は他人の予約行を見られないため、満席表示用に集計だけ公開する）
+create or replace function public.slot_booked_counts()
+returns table (slot_id uuid, booked_count bigint)
+language sql stable security definer set search_path = public as
+$$ select slot_id, count(*) from bookings where status = 'booked' group by slot_id $$;
+
 create or replace function public.cancel_booking(p_booking_id uuid) returns void
 language plpgsql security definer set search_path = public as $$
 declare v_starts timestamptz;
