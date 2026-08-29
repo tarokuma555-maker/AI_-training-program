@@ -25,8 +25,9 @@ export default function LoginForm() {
     });
 
     if (otpError) {
+      // 原因の切り分けができるよう、Supabaseからのエラー内容も表示する
       setError(
-        "ログインリンクを送信できませんでした。メールアドレスが登録済みかご確認ください。"
+        `ログインリンクを送信できませんでした。メールアドレスが登録済みかご確認ください。（詳細: ${otpError.message}）`
       );
       setSubmitting(false);
       return;
