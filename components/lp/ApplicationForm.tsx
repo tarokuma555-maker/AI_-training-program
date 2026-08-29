@@ -96,9 +96,21 @@ export default function ApplicationForm() {
   if (submitted) {
     return (
       <div className="rounded-2xl bg-white p-8 text-center sm:p-10">
-        <p className="text-4xl" aria-hidden>
-          ✉️
-        </p>
+        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-navy text-white">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-7 w-7"
+            aria-hidden
+          >
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="m3 7 9 6 9-6" />
+          </svg>
+        </span>
         <h3 className="mt-4 text-xl font-bold">
           お申し込みを受け付けました
         </h3>

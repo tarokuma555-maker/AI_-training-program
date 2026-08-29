@@ -15,8 +15,19 @@ export default function ForWhom() {
               key={text}
               className="flex items-start gap-4 rounded-2xl bg-mist p-5 sm:p-6"
             >
-              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-teal text-sm font-bold text-white">
-                ✓
+              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-teal text-white">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={3}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-3.5 w-3.5"
+                  aria-hidden
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
               </span>
               <p className="text-base leading-relaxed sm:text-lg">{text}</p>
             </li>
