@@ -108,6 +108,7 @@ $$ select cohort from profiles where id = auth.uid() $$;
 create table public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   name text not null,
+  email text not null unique,   -- 職員室の一覧表示用（auth.usersと二重管理になるが参照専用）
   role text not null default 'student' check (role in ('student', 'admin')),
   track text check (track in ('career', 'skill')),
   cohort text,                       -- 例 '2026-1'

@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { verifyAdmin } from "@/lib/adminGuard";
 import { createServiceRoleClient } from "@/lib/supabase/serviceRole";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -11,21 +11,6 @@ export interface CreateStudentInput {
   email: string;
   track: string;
   cohort: string;
-}
-
-/** adminか検証する（server action内ではredirectせず結果を返す） */
-async function verifyAdmin(): Promise<boolean> {
-  const supabase = createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return false;
-  const { data } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .maybeSingle();
-  return data?.role === "admin";
 }
 
 /** 受講生を登録する：Authユーザー作成＋profiles insert（招待制の入口） */
