@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { runAiScreening } from "@/lib/ai/screening";
 import { createAnonServerClient } from "@/lib/supabase/anonServer";
@@ -28,14 +29,15 @@ export async function POST(request: Request) {
     );
   }
 
+  // RLSは「anonはinsertのみ可（selectは管理者のみ）」のため、挿入行の返却
+  // （insert().select()）は拒否される。idはサーバー側で生成して返却なしで挿入する
+  const applicationId = randomUUID();
   const supabase = createAnonServerClient();
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("applications")
-    .insert(result.row)
-    .select("id")
-    .single();
+    .insert({ id: applicationId, ...result.row });
 
-  if (error || !data) {
+  if (error) {
     console.error("申込の保存に失敗しました:", error);
     return NextResponse.json(
       {
@@ -67,7 +69,7 @@ export async function POST(request: Request) {
         ai_recommendation: recommendation,
         status: "ai_reviewed",
       })
-      .eq("id", data.id)
+      .eq("id", applicationId)
       .eq("status", "pending");
     if (updateError) {
       console.error("AI一次判定の保存に失敗しました:", updateError);
