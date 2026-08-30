@@ -9,13 +9,16 @@ export default function LoginPage({
   return (
     <main className="flex min-h-screen items-center justify-center px-5">
       <div className="w-full max-w-md rounded-2xl bg-white p-6 sm:p-8">
-        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-navy text-white">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full border-4 border-navy text-navy">
           <Icon name="book" className="h-6 w-6" />
         </span>
-        <h1 className="mt-5 text-xl font-bold">受講生アプリ ログイン</h1>
+        <p className="mt-5 text-[10px] font-bold tracking-[0.25em] text-teal">
+          ENTRANCE
+        </p>
+        <h1 className="mt-1 text-xl font-bold">教室に入る</h1>
         <p className="mt-2 text-xs leading-relaxed text-navy/60">
-          登録済みのメールアドレスにログイン用リンクをお送りします。
-          このアプリは招待制です。登録がないメールアドレスは利用できません。
+          AI実務プログラムのオンライン教室です。登録済みのメールアドレスに、
+          教室に入るためのリンクをお送りします（招待制のため、登録がないメールアドレスは利用できません）。
         </p>
         {searchParams.error === "auth" && (
           <p className="mt-4 rounded-xl border border-accent/40 bg-accent/10 p-3 text-sm text-navy">

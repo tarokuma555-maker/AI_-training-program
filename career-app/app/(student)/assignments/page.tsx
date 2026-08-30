@@ -1,4 +1,5 @@
 import Link from "next/link";
+import RoomHeader from "@/components/rooms/RoomHeader";
 import { formatDateTime } from "@/lib/format";
 import { requireProfile } from "@/lib/profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -36,7 +37,7 @@ export default async function AssignmentsPage() {
 
   return (
     <div>
-      <h1 className="text-lg font-bold">課題提出室</h1>
+      <RoomHeader icon="pencil" title="課題提出室" en="ASSIGNMENTS" />
       {assignments.length === 0 ? (
         <p className="mt-4 rounded-2xl bg-white p-6 text-sm text-navy/60">
           公開中の課題はまだありません。

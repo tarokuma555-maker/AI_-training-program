@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import RoomHeader from "@/components/rooms/RoomHeader";
 import JobApplicationCard from "@/components/rooms/JobApplicationCard";
 import JobApplicationForm from "@/components/rooms/JobApplicationForm";
 import { requireProfile } from "@/lib/profile";
@@ -24,17 +25,17 @@ export default async function TrackerPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <div className="flex items-center justify-between">
-          <h1 className="text-lg font-bold">応募トラッカー室</h1>
-          <span className="rounded-full bg-navy px-3 py-1 text-xs font-bold text-white">
+      <RoomHeader
+        icon="trend"
+        title="応募トラッカー室"
+        en="TRACKER"
+        desc="応募したら必ず記録しましょう。週次面談はこの記録をもとに進めます（修了要件：3社以上）。"
+        right={
+          <span className="shrink-0 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white">
             {apps.length}社
           </span>
-        </div>
-        <p className="mt-1 text-xs text-navy/60">
-          応募したら必ず記録しましょう。週次面談はこの記録をもとに進めます（修了要件：3社以上）。
-        </p>
-      </div>
+        }
+      />
 
       <section className="rounded-2xl bg-white p-5">
         <h2 className="mb-3 text-sm font-bold">応募を記録する</h2>

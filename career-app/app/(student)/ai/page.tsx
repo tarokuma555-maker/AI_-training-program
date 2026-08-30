@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Icon from "@/components/ui/Icon";
 import NewQuestionForm from "@/components/rooms/NewQuestionForm";
+import RoomHeader from "@/components/rooms/RoomHeader";
 import { dailyLimit, jstDayStartIso } from "@/lib/ai/rate";
 import { formatDateTime } from "@/lib/format";
 import { requireProfile } from "@/lib/profile";
@@ -32,12 +33,16 @@ export default async function AiRoomPage() {
   return (
     <div className="space-y-6">
       <div>
-        <div className="flex items-center justify-between">
-          <h1 className="text-lg font-bold">AI質問室</h1>
-          <span className="rounded-full bg-teal/10 px-3 py-1 text-xs font-bold text-teal">
-            本日あと{remaining}問
-          </span>
-        </div>
+        <RoomHeader
+          icon="bot"
+          title="AI質問室"
+          en="AI TUTOR"
+          right={
+            <span className="shrink-0 rounded-full bg-teal/10 px-3 py-1 text-xs font-bold text-teal">
+              本日あと{remaining}問
+            </span>
+          }
+        />
         <p className="mt-2 rounded-xl bg-white p-4 text-xs leading-relaxed text-navy/70">
           講義内容の復習・Copilotの操作・課題の考え方について、AIチューターに質問できます。
           AIの回答は学習の補助です。応募や選考に関する個別のご相談は、週次面談で講師にお声がけください。

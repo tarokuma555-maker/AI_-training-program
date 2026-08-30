@@ -1,4 +1,5 @@
 import LogoutButton from "@/components/auth/LogoutButton";
+import RoomHeader from "@/components/rooms/RoomHeader";
 import { ATTENDANCE_LABELS, TRACK_LABELS } from "@/lib/constants";
 import { requireProfile } from "@/lib/profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -29,7 +30,7 @@ export default async function MyPage() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-lg font-bold">マイページ</h1>
+      <RoomHeader icon="user" title="マイページ" en="MY PAGE" />
 
       <section className="rounded-2xl bg-white p-5">
         <h2 className="text-sm font-bold text-navy/60">登録情報</h2>

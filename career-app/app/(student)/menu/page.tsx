@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Icon, { type IconName } from "@/components/ui/Icon";
+import RoomHeader from "@/components/rooms/RoomHeader";
 import { requireProfile } from "@/lib/profile";
 
 export const dynamic = "force-dynamic";
@@ -40,7 +41,7 @@ export default async function MenuPage() {
 
   return (
     <div>
-      <h1 className="text-lg font-bold">その他の部屋</h1>
+      <RoomHeader icon="folder" title="その他の教室" en="OTHERS" />
       <ul className="mt-4 space-y-3">
         {rooms.map((room) => (
           <li key={room.href}>

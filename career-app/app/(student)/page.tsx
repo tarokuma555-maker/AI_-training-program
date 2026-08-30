@@ -78,48 +78,64 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-lg font-bold">こんにちは、{profile.name}さん</h1>
+      <div>
+        <p className="text-[10px] font-bold tracking-[0.25em] text-teal">
+          ENTRANCE
+        </p>
+        <h1 className="mt-1 text-lg font-bold">
+          ようこそ、{profile.name}さん
+        </h1>
+      </div>
 
-      {/* 今週カード */}
+      {/* 今週の黒板 */}
       {week ? (
-        <section className="rounded-2xl bg-navy p-5 text-white">
-          <p className="text-xs font-bold text-white/60">今週</p>
-          <h2 className="mt-1 text-lg font-bold">
-            第{week.week_no}週　{week.title}
-          </h2>
-          {week.goal && (
-            <p className="mt-2 text-sm leading-relaxed text-white/80">
-              {week.goal}
+        <section className="rounded-2xl bg-navy p-2 text-white">
+          <div className="rounded-xl border border-dashed border-white/25 p-4 sm:p-5">
+            <p className="inline-block rounded bg-white/10 px-2.5 py-0.5 text-[10px] font-bold tracking-[0.2em] text-white/70">
+              WEEK {week.week_no}｜今週の黒板
             </p>
-          )}
-          {weekAssignments.length > 0 && (
-            <ul className="mt-4 space-y-2">
-              {weekAssignments.map((a) => (
-                <li key={a.id}>
-                  <Link
-                    href={`/assignments/${a.id}`}
-                    className="flex items-center justify-between gap-3 rounded-xl bg-white/10 px-4 py-3 text-sm"
-                  >
-                    <span className="font-bold">{a.title}</span>
-                    <span className="shrink-0 text-xs text-white/70">
-                      {a.submitted ? "提出済み" : `締切 ${formatDateTime(a.due_at)}`}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-          <Link
-            href="/library"
-            className="mt-4 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2 text-sm font-bold text-white"
-          >
-            <Icon name="book" className="h-4 w-4" />
-            今週の教材へ
-          </Link>
+            <h2 className="mt-2 text-lg font-bold">{week.title}</h2>
+            {week.goal && (
+              <p className="mt-2 text-sm leading-relaxed text-white/80">
+                {week.goal}
+              </p>
+            )}
+            {weekAssignments.length > 0 && (
+              <ul className="mt-4 space-y-2">
+                {weekAssignments.map((a) => (
+                  <li key={a.id}>
+                    <Link
+                      href={`/assignments/${a.id}`}
+                      className="flex items-center justify-between gap-3 rounded-xl bg-white/10 px-4 py-3 text-sm"
+                    >
+                      <span className="font-bold">{a.title}</span>
+                      <span className="shrink-0 text-xs text-white/70">
+                        {a.submitted
+                          ? "提出済み"
+                          : `締切 ${formatDateTime(a.due_at)}`}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <Link
+              href="/library"
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2 text-sm font-bold text-white"
+            >
+              <Icon name="book" className="h-4 w-4" />
+              今週の教材へ
+            </Link>
+          </div>
+          {/* チョーク置き */}
+          <div className="mx-auto my-1.5 h-1 w-24 rounded-full bg-white/15" aria-hidden />
         </section>
       ) : (
-        <section className="rounded-2xl bg-white p-5 text-sm text-navy/60">
-          公開中の週はまだありません。開講までお待ちください。
+        <section className="rounded-2xl bg-navy p-2 text-white">
+          <div className="rounded-xl border border-dashed border-white/25 p-5 text-sm text-white/70">
+            公開中の週はまだありません。開講までお待ちください。
+          </div>
+          <div className="mx-auto my-1.5 h-1 w-24 rounded-full bg-white/15" aria-hidden />
         </section>
       )}
 
@@ -145,9 +161,14 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 教室一覧 */}
+      {/* 教室一覧（廊下） */}
       <section>
-        <h2 className="text-sm font-bold">教室</h2>
+        <h2 className="flex items-baseline gap-2 text-sm font-bold">
+          各教室
+          <span className="text-[9px] font-bold tracking-[0.25em] text-navy/40">
+            CLASS ROOMS
+          </span>
+        </h2>
         <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
           {buildRooms({
             track: profile.track,
@@ -159,26 +180,32 @@ export default async function HomePage() {
             <Link
               key={room.href}
               href={room.href}
-              className="rounded-2xl bg-white p-4"
+              className="relative flex flex-col items-center rounded-t-2xl rounded-b-lg border border-navy/15 bg-white px-3 pb-4 pt-3 text-center transition hover:border-teal/50"
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy text-white">
+              {room.badge && (
+                <span className="absolute -right-1.5 -top-1.5 rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-white">
+                  {room.badge}
+                </span>
+              )}
+              {/* ドアプレート */}
+              <span className="whitespace-nowrap rounded bg-navy px-3 py-1 text-xs font-bold text-white">
+                {room.name}
+              </span>
+              <span className="mt-3 flex h-12 w-12 items-center justify-center rounded-full bg-mist text-navy">
                 <Icon name={room.icon} className="h-5 w-5" />
               </span>
-              <span className="mt-3 flex items-center gap-2">
-                <span className="text-sm font-bold">{room.name}</span>
-                {room.badge && (
-                  <span className="rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-white">
-                    {room.badge}
-                  </span>
-                )}
-              </span>
               <span
-                className={`block text-xs ${
+                className={`mt-2 block text-xs leading-snug ${
                   room.highlight ? "font-bold text-accent" : "text-navy/50"
                 }`}
               >
                 {room.sub}
               </span>
+              {/* ドアノブ */}
+              <span
+                aria-hidden
+                className="absolute right-2 top-1/2 h-6 w-1.5 -translate-y-1/2 rounded-full bg-navy/15"
+              />
             </Link>
           ))}
         </div>

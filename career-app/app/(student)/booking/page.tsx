@@ -1,4 +1,5 @@
 import Icon from "@/components/ui/Icon";
+import RoomHeader from "@/components/rooms/RoomHeader";
 import { BookButton, CancelButton } from "@/components/rooms/BookingButtons";
 import { SLOT_KIND_LABELS } from "@/lib/constants";
 import { formatSlot } from "@/lib/format";
@@ -46,12 +47,12 @@ export default async function BookingPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-lg font-bold">予約室</h1>
-        <p className="mt-1 text-xs text-navy/60">
-          個別面談（週次面談）の予約ができます。キャンセルは開始24時間前まで可能です。
-        </p>
-      </div>
+      <RoomHeader
+        icon="cal"
+        title="予約室"
+        en="RESERVATION"
+        desc="個別面談（週次面談）の予約ができます。キャンセルは開始24時間前まで可能です。"
+      />
 
       {/* 自分の予約 */}
       <section>

@@ -39,9 +39,9 @@ export default function LoginForm() {
   if (sent) {
     return (
       <div className="rounded-xl bg-mist p-5 text-sm leading-relaxed">
-        <p className="font-bold">ログイン用リンクを送信しました</p>
+        <p className="font-bold">教室に入るリンクを送信しました</p>
         <p className="mt-2 text-navy/70">
-          {email} 宛のメールに記載されたリンクを開くと、ログインが完了します。
+          {email} 宛のメールに記載されたリンクを開くと、教室に入れます。
           届かない場合は迷惑メールフォルダをご確認ください。
         </p>
       </div>
@@ -75,7 +75,7 @@ export default function LoginForm() {
         disabled={submitting}
         className="w-full rounded-full bg-navy px-8 py-3 text-base font-bold text-white transition hover:opacity-90 disabled:opacity-50"
       >
-        {submitting ? "送信中…" : "ログインリンクを送る"}
+        {submitting ? "送信中…" : "教室に入るリンクを送る"}
       </button>
     </form>
   );

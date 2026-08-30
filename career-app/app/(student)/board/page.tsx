@@ -1,4 +1,5 @@
 import Icon from "@/components/ui/Icon";
+import RoomHeader from "@/components/rooms/RoomHeader";
 import MarkReadOnMount from "@/components/rooms/MarkReadOnMount";
 import { formatDateTime } from "@/lib/format";
 import { requireProfile } from "@/lib/profile";
@@ -28,7 +29,7 @@ export default async function BoardPage() {
   return (
     <div>
       <MarkReadOnMount unreadIds={unreadIds} />
-      <h1 className="text-lg font-bold">掲示板</h1>
+      <RoomHeader icon="pin" title="掲示板" en="BOARD" />
       {announcements.length === 0 ? (
         <p className="mt-4 rounded-2xl bg-white p-6 text-sm text-navy/60">
           お知らせはまだありません。

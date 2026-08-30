@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Icon from "@/components/ui/Icon";
+import RoomHeader from "@/components/rooms/RoomHeader";
 import { formatDate } from "@/lib/format";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Week } from "@/lib/types";
@@ -18,10 +19,12 @@ export default async function LibraryPage() {
 
   return (
     <div>
-      <h1 className="text-lg font-bold">資料室</h1>
-      <p className="mt-1 text-xs text-navy/60">
-        週ごとの棚に、動画・スライド・配布テンプレをまとめています。
-      </p>
+      <RoomHeader
+        icon="book"
+        title="資料室"
+        en="LIBRARY"
+        desc="週ごとの棚に、動画・スライド・配布テンプレをまとめています。"
+      />
       {weeks.length === 0 ? (
         <p className="mt-6 rounded-2xl bg-white p-6 text-sm text-navy/60">
           教材はまだ登録されていません。
