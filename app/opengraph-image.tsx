@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "AI研修付き転職支援プログラム（6週間・費用は採用企業側負担）";
+export const alt = "AI研修付き転職支援プログラム（6週間・受講料無料）";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

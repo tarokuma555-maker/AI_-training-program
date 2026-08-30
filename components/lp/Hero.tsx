@@ -1,7 +1,7 @@
 import Icon from "@/components/ui/Icon";
 
 const badges = [
-  "費用は採用企業側負担",
+  "受講料は無料",
   "6週間・週1回2時間",
   "働きながら受講できる",
 ];
@@ -10,7 +10,7 @@ const stats = [
   { value: "6週間", label: "プログラム期間" },
   { value: "週2h", label: "講義＋課題2〜3h" },
   { value: "3週目", label: "から応募スタート" },
-  { value: "企業側負担", label: "受講費用" },
+  { value: "無料", label: "受講費用" },
 ];
 
 export default function Hero() {
