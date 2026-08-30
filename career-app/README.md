@@ -10,6 +10,9 @@
 LP（リポジトリ直下）と同じSupabaseプロジェクトを共有します。
 このフォルダは自己完結しているため、別リポジトリへ切り出す場合はフォルダごと移動できます。
 
+本番環境：Vercelプロジェクト「training-program」（https://training-program-two.vercel.app）。
+このブランチへのプッシュで自動デプロイされます。
+
 ## セットアップ
 
 ```bash
