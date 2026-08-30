@@ -25,7 +25,8 @@ export default function Faq() {
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-24">
-        <h2 className="text-2xl font-bold sm:text-3xl">よくある質問</h2>
+        <p className="text-xs font-bold tracking-[0.2em] text-teal">FAQ</p>
+        <h2 className="mt-2 text-2xl font-bold sm:text-3xl">よくある質問</h2>
         <div className="mt-8 space-y-3 sm:mt-10">
           {faqs.map((faq) => (
             <details
