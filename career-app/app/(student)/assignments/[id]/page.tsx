@@ -60,9 +60,20 @@ export default async function AssignmentDetailPage({
 
       {submission && (
         <section className="rounded-2xl bg-teal/10 p-5">
-          <h2 className="text-sm font-bold text-teal">
-            提出済み（{formatDateTime(submission.submitted_at)}）
-          </h2>
+          <div className="flex items-start justify-between gap-3">
+            <h2 className="text-sm font-bold text-teal">
+              提出済み（{formatDateTime(submission.submitted_at)}）
+            </h2>
+            <span
+              className={`flex h-11 w-11 shrink-0 -rotate-12 items-center justify-center rounded-full border-2 text-xs font-bold ${
+                submission.admin_comment
+                  ? "border-accent text-accent"
+                  : "border-teal text-teal"
+              }`}
+            >
+              {submission.admin_comment ? "講評" : "済"}
+            </span>
+          </div>
           {submission.storage_path && (
             <p className="mt-2">
               <AttachmentLink path={submission.storage_path} />

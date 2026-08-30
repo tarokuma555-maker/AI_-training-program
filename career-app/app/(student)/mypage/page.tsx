@@ -1,6 +1,8 @@
+import Icon from "@/components/ui/Icon";
 import LogoutButton from "@/components/auth/LogoutButton";
 import RoomHeader from "@/components/rooms/RoomHeader";
 import { ATTENDANCE_LABELS, TRACK_LABELS } from "@/lib/constants";
+import { formatDate } from "@/lib/format";
 import { requireProfile } from "@/lib/profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -32,41 +34,70 @@ export default async function MyPage() {
     <div className="space-y-5">
       <RoomHeader icon="user" title="マイページ" en="MY PAGE" />
 
-      <section className="rounded-2xl bg-white p-5">
-        <h2 className="text-sm font-bold text-navy/60">登録情報</h2>
-        <dl className="mt-3 space-y-2 text-sm">
-          <div className="flex justify-between">
-            <dt className="text-navy/60">氏名</dt>
-            <dd className="font-bold">{profile.name}</dd>
-          </div>
-          <div className="flex justify-between">
-            <dt className="text-navy/60">トラック</dt>
-            <dd className="font-bold">
-              {profile.track ? TRACK_LABELS[profile.track] : "−"}
-            </dd>
-          </div>
-          <div className="flex justify-between">
-            <dt className="text-navy/60">期</dt>
-            <dd className="font-bold">{profile.cohort ?? "−"}</dd>
-          </div>
-        </dl>
+      {/* 生徒手帳 */}
+      <section className="overflow-hidden rounded-2xl border border-navy/10 bg-white">
+        <div className="flex items-center justify-between bg-navy px-5 py-3 text-white">
+          <span className="flex items-center gap-2.5 text-sm font-bold">
+            <span className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white/40">
+              <Icon name="book" className="h-3.5 w-3.5" />
+            </span>
+            生徒手帳
+          </span>
+          <span className="text-[9px] font-bold tracking-[0.25em] text-white/50">
+            STUDENT CARD
+          </span>
+        </div>
+        <div className="p-5">
+          <p className="text-xs text-navy/50">氏名</p>
+          <p className="text-xl font-bold">{profile.name}</p>
+          <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+            <div>
+              <dt className="text-xs text-navy/50">トラック</dt>
+              <dd className="font-bold">
+                {profile.track ? TRACK_LABELS[profile.track] : "−"}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-xs text-navy/50">期</dt>
+              <dd className="font-bold">{profile.cohort ?? "−"}</dd>
+            </div>
+            <div>
+              <dt className="text-xs text-navy/50">メールアドレス</dt>
+              <dd className="break-all font-bold">{profile.email}</dd>
+            </div>
+            <div>
+              <dt className="text-xs text-navy/50">入学日</dt>
+              <dd className="font-bold">{formatDate(profile.created_at)}</dd>
+            </div>
+          </dl>
+        </div>
       </section>
 
       <section className="rounded-2xl bg-white p-5">
-        <h2 className="text-sm font-bold text-navy/60">出席の記録</h2>
+        <h2 className="text-sm font-bold text-navy/60">出席簿</h2>
         {Object.keys(attCounts).length === 0 ? (
           <p className="mt-3 text-sm text-navy/60">まだ記録はありません。</p>
         ) : (
-          <ul className="mt-3 flex flex-wrap gap-2">
-            {Object.entries(attCounts).map(([status, count]) => (
-              <li
-                key={status}
-                className="rounded-full bg-mist px-4 py-1.5 text-sm"
-              >
-                {ATTENDANCE_LABELS[status] ?? status}：
-                <span className="font-bold">{count}回</span>
-              </li>
-            ))}
+          <ul className="mt-3 flex flex-wrap gap-3">
+            {Object.entries(attCounts).map(([status, count]) => {
+              const stampStyle =
+                status === "present"
+                  ? "border-teal text-teal"
+                  : status === "absent"
+                    ? "border-accent text-accent"
+                    : "border-navy/40 text-navy/60";
+              return (
+                <li
+                  key={status}
+                  className={`flex h-16 w-16 -rotate-6 flex-col items-center justify-center rounded-full border-2 text-center ${stampStyle}`}
+                >
+                  <span className="text-[10px] font-bold">
+                    {ATTENDANCE_LABELS[status] ?? status}
+                  </span>
+                  <span className="text-sm font-bold">{count}回</span>
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>

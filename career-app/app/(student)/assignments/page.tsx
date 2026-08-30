@@ -56,8 +56,15 @@ export default async function AssignmentsPage() {
                   <div className="flex items-center justify-between gap-3">
                     <p className="text-sm font-bold">{a.title}</p>
                     {sub ? (
-                      <span className="shrink-0 rounded-full bg-teal/15 px-3 py-1 text-xs font-bold text-teal">
-                        {sub.hasComment ? "コメントあり" : "提出済み"}
+                      // 提出済みはハンコ風（講師コメントが付くと「講評」印になる）
+                      <span
+                        className={`flex h-10 w-10 shrink-0 -rotate-12 items-center justify-center rounded-full border-2 text-xs font-bold ${
+                          sub.hasComment
+                            ? "border-accent text-accent"
+                            : "border-teal text-teal"
+                        }`}
+                      >
+                        {sub.hasComment ? "講評" : "済"}
                       </span>
                     ) : (
                       <span

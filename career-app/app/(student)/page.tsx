@@ -23,6 +23,16 @@ export default async function HomePage() {
     .limit(1);
   const week = (weekRows?.[0] ?? null) as Week | null;
 
+  // 時間割（全6週の公開状況）
+  const { data: allWeekRows } = await supabase
+    .from("weeks")
+    .select("week_no, publish_at");
+  const publishedNos = new Set(
+    (allWeekRows ?? [])
+      .filter((w) => new Date(w.publish_at as string) <= now)
+      .map((w) => w.week_no as number)
+  );
+
   // 今週の課題＋自分の提出状況
   let weekAssignments: (Assignment & { submitted: boolean })[] = [];
   if (week) {
@@ -94,9 +104,11 @@ export default async function HomePage() {
             <p className="inline-block rounded bg-white/10 px-2.5 py-0.5 text-[10px] font-bold tracking-[0.2em] text-white/70">
               WEEK {week.week_no}｜今週の黒板
             </p>
-            <h2 className="mt-2 text-lg font-bold">{week.title}</h2>
+            <h2 className="mt-2 font-chalk text-2xl tracking-wide">
+              {week.title}
+            </h2>
             {week.goal && (
-              <p className="mt-2 text-sm leading-relaxed text-white/80">
+              <p className="mt-1 font-chalk text-base leading-relaxed text-white/85">
                 {week.goal}
               </p>
             )}
@@ -132,12 +144,49 @@ export default async function HomePage() {
         </section>
       ) : (
         <section className="rounded-2xl bg-navy p-2 text-white">
-          <div className="rounded-xl border border-dashed border-white/25 p-5 text-sm text-white/70">
+          <div className="rounded-xl border border-dashed border-white/25 p-5 font-chalk text-base text-white/80">
             公開中の週はまだありません。開講までお待ちください。
           </div>
           <div className="mx-auto my-1.5 h-1 w-24 rounded-full bg-white/15" aria-hidden />
         </section>
       )}
+
+      {/* 6週間の時間割 */}
+      <Link href="/library" className="block rounded-2xl bg-white p-4">
+        <span className="flex items-baseline gap-2 text-sm font-bold">
+          6週間の時間割
+          <span className="text-[9px] font-bold tracking-[0.25em] text-navy/40">
+            TIMETABLE
+          </span>
+        </span>
+        <div className="mt-3 grid grid-cols-6 gap-1.5">
+          {[1, 2, 3, 4, 5, 6].map((n) => {
+            const published = publishedNos.has(n);
+            const isCurrent = week?.week_no === n;
+            return (
+              <span
+                key={n}
+                className={`flex h-12 flex-col items-center justify-center gap-0.5 rounded-lg text-center ${
+                  isCurrent
+                    ? "bg-accent text-white"
+                    : published
+                      ? "bg-teal/15 text-teal"
+                      : "bg-mist text-navy/40"
+                }`}
+              >
+                <span className="text-[9px] font-bold">W{n}</span>
+                {isCurrent ? (
+                  <span className="text-[10px] font-bold">今週</span>
+                ) : published ? (
+                  <Icon name="check" className="h-3 w-3" />
+                ) : (
+                  <Icon name="lock" className="h-3 w-3" />
+                )}
+              </span>
+            );
+          })}
+        </div>
+      </Link>
 
       {/* 締切アラート */}
       {dueSoon.length > 0 && (

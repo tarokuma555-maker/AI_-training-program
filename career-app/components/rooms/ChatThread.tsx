@@ -1,6 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Icon from "@/components/ui/Icon";
+
+function TutorAvatar() {
+  return (
+    <span className="mr-2 mt-1 flex h-8 w-8 shrink-0 flex-col items-center justify-center rounded-full bg-navy text-white">
+      <Icon name="bot" className="h-4 w-4" />
+    </span>
+  );
+}
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -66,21 +75,35 @@ export default function ChatThread({
             key={i}
             className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
           >
-            <div
-              className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                m.role === "user"
-                  ? "rounded-br-md bg-navy text-white"
-                  : "rounded-bl-md bg-white"
-              }`}
-            >
-              {m.content}
+            {m.role === "assistant" && <TutorAvatar />}
+            <div className={m.role === "assistant" ? "max-w-[85%]" : "max-w-[85%]"}>
+              {m.role === "assistant" && (
+                <p className="mb-0.5 text-[10px] font-bold text-navy/50">
+                  AIチューター
+                </p>
+              )}
+              <div
+                className={`whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                  m.role === "user"
+                    ? "rounded-br-md bg-navy text-white"
+                    : "rounded-tl-md bg-white"
+                }`}
+              >
+                {m.content}
+              </div>
             </div>
           </div>
         ))}
         {sending && (
           <div className="flex justify-start">
-            <div className="rounded-2xl rounded-bl-md bg-white px-4 py-3 text-sm text-navy/50">
-              回答を作成中…
+            <TutorAvatar />
+            <div>
+              <p className="mb-0.5 text-[10px] font-bold text-navy/50">
+                AIチューター
+              </p>
+              <div className="rounded-2xl rounded-tl-md bg-white px-4 py-3 text-sm text-navy/50">
+                回答を作成中…
+              </div>
             </div>
           </div>
         )}

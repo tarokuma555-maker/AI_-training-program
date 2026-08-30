@@ -12,6 +12,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-noto-sans-jp)", "Hiragino Sans", "Meiryo", "sans-serif"],
+        chalk: ["var(--font-chalk)", "var(--font-noto-sans-jp)", "sans-serif"],
       },
     },
   },

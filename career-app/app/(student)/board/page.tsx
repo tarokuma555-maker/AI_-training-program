@@ -35,16 +35,23 @@ export default async function BoardPage() {
           お知らせはまだありません。
         </p>
       ) : (
-        <ul className="mt-4 space-y-3">
-          {announcements.map((a) => {
+        <ul className="mt-5 space-y-4">
+          {announcements.map((a, i) => {
             const unread = !readSet.has(a.id);
             return (
               <li
                 key={a.id}
-                className={`rounded-2xl bg-white p-4 ${
-                  unread ? "border-l-4 border-accent" : ""
-                }`}
+                className={`relative rounded-lg bg-white p-4 pt-5 shadow-sm ${
+                  i % 2 ? "-rotate-[0.5deg]" : "rotate-[0.5deg]"
+                } ${unread ? "ring-2 ring-accent/50" : ""}`}
               >
+                {/* 画鋲 */}
+                <span
+                  aria-hidden
+                  className={`absolute -top-1.5 left-1/2 h-3.5 w-3.5 -translate-x-1/2 rounded-full shadow ${
+                    unread ? "bg-accent" : "bg-teal"
+                  }`}
+                />
                 <div className="flex items-center gap-2">
                   {unread && (
                     <span className="rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-white">
