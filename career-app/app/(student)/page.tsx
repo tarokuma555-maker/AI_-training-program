@@ -1,9 +1,8 @@
 import Link from "next/link";
-import Icon from "@/components/ui/Icon";
+import Icon, { type IconName } from "@/components/ui/Icon";
 import { formatDateTime, formatSlot } from "@/lib/format";
 import { requireProfile } from "@/lib/profile";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { SLOT_KIND_LABELS } from "@/lib/constants";
 import type { Assignment, LessonSlot, Week } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -146,44 +145,113 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* お知らせ・予約 */}
-      <div className="grid gap-3 sm:grid-cols-2">
-        <Link
-          href="/board"
-          className="flex items-center gap-3 rounded-2xl bg-white p-4"
-        >
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy text-white">
-            <Icon name="bell" className="h-5 w-5" />
-          </span>
-          <span className="text-sm font-bold">お知らせ</span>
-          {unreadCount > 0 && (
-            <span className="ml-auto rounded-full bg-accent px-2.5 py-0.5 text-xs font-bold text-white">
-              未読{unreadCount}
-            </span>
-          )}
-        </Link>
-        <Link
-          href="/booking"
-          className="flex items-center gap-3 rounded-2xl bg-white p-4"
-        >
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy text-white">
-            <Icon name="cal" className="h-5 w-5" />
-          </span>
-          {nextBooking ? (
-            <span className="text-sm">
-              <span className="block text-xs text-navy/60">次の予約</span>
-              <span className="font-bold">
-                {formatSlot(nextBooking.slot.starts_at)}（
-                {SLOT_KIND_LABELS[nextBooking.slot.kind]}）
+      {/* 教室一覧 */}
+      <section>
+        <h2 className="text-sm font-bold">教室</h2>
+        <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {buildRooms({
+            track: profile.track,
+            isAdmin: profile.role === "admin",
+            unreadCount,
+            dueSoonCount: dueSoon.length,
+            nextBookingAt: nextBooking?.slot.starts_at ?? null,
+          }).map((room) => (
+            <Link
+              key={room.href}
+              href={room.href}
+              className="rounded-2xl bg-white p-4"
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy text-white">
+                <Icon name={room.icon} className="h-5 w-5" />
               </span>
-            </span>
-          ) : (
-            <span className="text-sm font-bold">面談を予約する</span>
-          )}
-        </Link>
-      </div>
+              <span className="mt-3 flex items-center gap-2">
+                <span className="text-sm font-bold">{room.name}</span>
+                {room.badge && (
+                  <span className="rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-white">
+                    {room.badge}
+                  </span>
+                )}
+              </span>
+              <span
+                className={`block text-xs ${
+                  room.highlight ? "font-bold text-accent" : "text-navy/50"
+                }`}
+              >
+                {room.sub}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
     </div>
   );
+}
+
+interface RoomCard {
+  href: string;
+  icon: IconName;
+  name: string;
+  sub: string;
+  badge?: string;
+  highlight?: boolean;
+}
+
+function buildRooms(input: {
+  track: string | null;
+  isAdmin: boolean;
+  unreadCount: number;
+  dueSoonCount: number;
+  nextBookingAt: string | null;
+}): RoomCard[] {
+  const rooms: RoomCard[] = [
+    { href: "/library", icon: "book", name: "資料室", sub: "教材・動画" },
+    { href: "/ai", icon: "bot", name: "AI質問室", sub: "AIチューターに質問" },
+    {
+      href: "/booking",
+      icon: "cal",
+      name: "予約室",
+      sub: input.nextBookingAt
+        ? `次回 ${formatSlot(input.nextBookingAt)}`
+        : "面談を予約する",
+      highlight: !input.nextBookingAt,
+    },
+    {
+      href: "/assignments",
+      icon: "pencil",
+      name: "課題提出室",
+      sub: input.dueSoonCount > 0 ? "締切が近い課題あり" : "提出・確認",
+      badge: input.dueSoonCount > 0 ? `${input.dueSoonCount}件` : undefined,
+      highlight: input.dueSoonCount > 0,
+    },
+  ];
+  if (input.track === "career") {
+    rooms.push({
+      href: "/tracker",
+      icon: "trend",
+      name: "応募トラッカー室",
+      sub: "応募の記録",
+    });
+  }
+  rooms.push(
+    {
+      href: "/board",
+      icon: "pin",
+      name: "掲示板",
+      sub: input.unreadCount > 0 ? "未読のお知らせ" : "お知らせ",
+      badge: input.unreadCount > 0 ? `未読${input.unreadCount}` : undefined,
+      highlight: input.unreadCount > 0,
+    },
+    { href: "/mypage", icon: "user", name: "マイページ", sub: "登録情報・記録" }
+  );
+  if (input.isAdmin) {
+    rooms.push({
+      href: "/admin",
+      icon: "board",
+      name: "職員室",
+      sub: "管理画面",
+    });
+  }
+  return rooms;
 }
 
 async function fetchSubmittedSet(
