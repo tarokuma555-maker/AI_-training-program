@@ -10,7 +10,11 @@ export type IconName =
   | "wallet"
   | "pencil"
   | "users"
-  | "arrow";
+  | "arrow"
+  | "play"
+  | "pause"
+  | "volume"
+  | "volumeOff";
 
 const paths: Record<IconName, React.ReactNode> = {
   check: <path d="M20 6 9 17l-5-5" />,
@@ -73,6 +77,27 @@ const paths: Record<IconName, React.ReactNode> = {
     <>
       <path d="M5 12h14" />
       <path d="m13 6 6 6-6 6" />
+    </>
+  ),
+  play: <path d="M7 4.5v15l12.5-7.5z" />,
+  pause: (
+    <>
+      <path d="M8 5v14" />
+      <path d="M16 5v14" />
+    </>
+  ),
+  volume: (
+    <>
+      <path d="M4 9.5v5h3.5L12 19V5L7.5 9.5z" />
+      <path d="M15.5 9a4 4 0 0 1 0 6" />
+      <path d="M18.5 6.5a7.5 7.5 0 0 1 0 11" />
+    </>
+  ),
+  volumeOff: (
+    <>
+      <path d="M4 9.5v5h3.5L12 19V5L7.5 9.5z" />
+      <path d="m16 9.5 5 5" />
+      <path d="m21 9.5-5 5" />
     </>
   ),
 };

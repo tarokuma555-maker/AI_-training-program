@@ -1,4 +1,5 @@
 import Icon from "@/components/ui/Icon";
+import PromoVideo from "@/components/lp/PromoVideo";
 
 const badges = [
   "受講料は無料",
@@ -23,8 +24,10 @@ export default function Hero() {
           <div className="absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-accent/15 blur-3xl" />
         </div>
 
-        <div className="relative mx-auto max-w-5xl px-5 pb-24 pt-12 sm:px-8 sm:pb-32 sm:pt-20">
-          <div className="animate-fade-up flex flex-wrap gap-2">
+        <div className="relative mx-auto max-w-5xl px-5 pb-24 pt-6 sm:px-8 sm:pb-32 sm:pt-10">
+          <PromoVideo />
+
+          <div className="animate-fade-up mt-10 flex flex-wrap gap-2 sm:mt-14">
             {badges.map((b) => (
               <span
                 key={b}
@@ -39,14 +42,16 @@ export default function Hero() {
             現場の経験を、
             <br />
             次のキャリアの
-            <span className="relative inline-block">
-              武器
-              <span
-                aria-hidden
-                className="absolute inset-x-0 bottom-1 -z-10 h-3 bg-accent/70 sm:bottom-2 sm:h-4"
-              />
+            <span className="whitespace-nowrap">
+              <span className="relative inline-block">
+                武器
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 bottom-1 -z-10 h-3 bg-accent/70 sm:bottom-2 sm:h-4"
+                />
+              </span>
+              に。
             </span>
-            に。
           </h1>
 
           <p className="animate-fade-up-1 mt-6 max-w-2xl text-base leading-relaxed text-mist/90 sm:text-lg">
@@ -57,6 +62,7 @@ export default function Hero() {
 
           <div className="animate-fade-up-2 mt-10">
             <a
+              id="hero-cta"
               href="#apply"
               className="inline-flex items-center gap-3 rounded-full bg-accent px-10 py-4 text-base font-bold text-white shadow-lg shadow-accent/30 transition hover:translate-y-[-1px] hover:opacity-95 sm:px-12 sm:py-5 sm:text-lg"
             >
